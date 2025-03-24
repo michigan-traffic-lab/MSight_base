@@ -1,4 +1,5 @@
 import bisect
+
 # from .road_object import RoadObject
 
 class Container:
@@ -34,13 +35,13 @@ class Trajectory(Container):
             self.step_to_object_map[step] = obj
             if index > 0:
                 self.objects[index - 1].next = obj
-                self.obj.prev = self.objects[index - 1]
+                obj.prev = self.objects[index - 1]
             if index < len(self.objects) - 1:
-                self.obj.next = self.objects[index + 1]
-                self.objects[index + 1].prev = self.obj
+                obj.next = self.objects[index + 1]
+                self.objects[index + 1].prev = obj
         else:
             if len(self.steps) > 0 and step < self.steps[-1]:
-                raise ValueError(f"Step {step} is less than the last step {self.steps[-1]}")
+                raise ValueError(f"Step {step} is less than the last step {self.steps[-1]}, if you want to insert in between use insort=True")
             self.objects.append(obj)
             self.step_to_object_map[step] = obj
             self.steps.append(step)
@@ -54,16 +55,12 @@ class Trajectory(Container):
 
 
 class Frame(Container):
-    def __init__(self, step, timestamp=None, objects=None, traj_ids=None, traj_id_to_obj_map=None):
+    def __init__(self, step, timestamp=None):
         self.step = step
         self.timestamp = timestamp
-        if traj_ids is None:
-            traj_ids = set()
-        self.traj_ids = traj_ids
-        if traj_id_to_obj_map is None:
-            traj_id_to_obj_map = {}
-        self.traj_id_to_obj_map = traj_id_to_obj_map
-        super().__init__(None, objects or [])
+        self.traj_ids = set()
+        self.traj_id_to_obj_map = {}
+        super().__init__(None, objects=[])
 
     def add_object(self, obj):
         if obj.traj_id in self.traj_ids:
@@ -72,6 +69,14 @@ class Frame(Container):
         self.traj_id_to_obj_map[obj.traj_id] = obj
         self.traj_ids.add(obj.traj_id)
         obj.frame = self
+
+    def remove_object(self, obj):
+        if obj.traj_id not in self.traj_ids:
+            raise ValueError(f"Object with id {obj.traj_id} does not exist in the frame")
+        self.objects.remove(obj)
+        del self.traj_id_to_obj_map[obj.traj_id]
+        self.traj_ids.remove(obj.traj_id)
+        obj.frame = None
 
 
 class TrajectoryManager:
@@ -91,7 +96,7 @@ class TrajectoryManager:
     def last_frame(self):
         return self.frames[-1]
 
-    def add_object(self, obj, traj_id, step, timestamp=None):
+    def add_object(self, obj, traj_id, step, timestamp=None, insort=False):
         if traj_id not in self.traj_ids:
             traj = Trajectory(traj_id)
             self.trajectories.append(traj)
@@ -100,17 +105,26 @@ class TrajectoryManager:
         else:
             traj = self.traj_id_to_traj_map[traj_id]
 
-        if step == self.last_step:
-            frame = self.frames[-1]
-        elif step == self.last_step + 1:
+
+        if step == self.last_step + 1:
             frame = Frame(step, timestamp)
             self.frames.append(frame)
             if timestamp is not None:
                 self.timestamps.append(timestamp)
                 self.timestamp_to_frame_map[timestamp] = frame
+        elif step <= self.last_step:
+            frame = self.frames[step]
         else:
-            raise ValueError(f"Step {step} is not the last step or the next step")
+            raise ValueError(f"Step {step} is not a valid step, valid steps are from 0 to {self.last_step+1}")
 
-        traj.add_object(obj, step)
+        traj.add_object(obj, step, insort=insort)
         frame.add_object(obj)
-        
+
+    def remove_traj(self, traj: Trajectory):
+        print(f"Removing trajectory with id {traj.id}")
+        tid = traj.id
+        self.trajectories.remove(traj)
+        self.traj_ids.remove(tid)
+        del self.traj_id_to_traj_map[tid]
+        for obj in traj:
+            obj.frame.remove_object(obj)

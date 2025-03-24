@@ -1,10 +1,11 @@
 class RoadObject:
-    def __init__(self, x, y, heading=None, width=None, length=None):
+    def __init__(self, x, y, heading=None, width=None, length=None, category=None):
         self.x = x
         self.y = y
         self.heading = heading
         self.width = width
         self.length = length
+        self.category = category
         self.traj = None
         self.frame = None
         self.prev = None

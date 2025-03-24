@@ -2,6 +2,7 @@ from pathlib import Path
 from msight_base import TrajectoryManager, RoadObject
 import json
 from datetime import datetime
+from tqdm import tqdm
 
 
 def get_timestamp_from_filename(file_name: str) -> datetime:
@@ -13,7 +14,7 @@ def get_timestamp_from_filename(file_name: str) -> datetime:
 def read_msight_json_data(file_path: Path) -> TrajectoryManager:
     tm = TrajectoryManager()
     step = 0
-    for frame_file in file_path.iterdir():
+    for frame_file in tqdm(list(file_path.iterdir())):
         if frame_file.suffix != ".json":
             continue
         timestamp = get_timestamp_from_filename(frame_file.stem)
