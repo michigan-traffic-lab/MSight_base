@@ -71,11 +71,11 @@ def _print_vehicle_info(vis, ptc, v, color):
 
     cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
                 fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
-    pt = (ptc[0] + 15, ptc[1] + 60)
-    if hasattr(v, 'lane') and v.lane is not None:
-        text = f"lane: {v.lane}"
-        cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-                    fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
+    # pt = (ptc[0] + 15, ptc[1] + 60)
+    # if hasattr(v, 'lane') and v.lane is not None:
+    #     text = f"lane: {v.lane}"
+    #     cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+    #                 fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
     # # print category
     # if v.category is not None:
     #     pt = (ptc[0] + 15, ptc[1] + 40)
