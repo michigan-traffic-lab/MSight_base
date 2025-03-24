@@ -7,86 +7,6 @@ from msight_base import TrajectoryManager
 from .utils import coord_normalization, coord_unnormalization
 
 
-def _draw_vehicle_as_point(vis, ptc, color):
-    # draw circle boundary
-    cv2.circle(vis, tuple(ptc), 10, color, -1)
-    # draw center location
-    cv2.circle(vis, tuple(ptc), 4, (255, 255, 0), -1)
-
-
-def _draw_vehicle_as_box(vis, pts, color):
-    # fill rectangle
-    cv2.fillPoly(vis, [np.array(pts)], color, lineType=cv2.LINE_AA)
-
-
-def _draw_vehicle_heading_as_arrow(vis, ptc, heading, color):
-    # draw heading
-    # convert degree to radian
-    heading = math.radians(-heading + 90)
-
-    line_length = 50
-    pt1 = (int(ptc[0]), int(ptc[1]))
-    pt2 = (int(ptc[0] + line_length*np.cos(heading)),
-           int(ptc[1] + line_length*np.sin(heading)))
-    cv2.arrowedLine(vis, pt1=pt1, pt2=pt2, color=color,
-                    thickness=3, line_type=cv2.LINE_AA)
-
-
-def _draw_predicted_future(vis, pts, color):
-    # draw mean trajectory
-    for i in range(len(pts)-1):
-        pt1 = (int(pts[i][0]), int(pts[i][1]))
-        pt2 = (int(pts[i+1][0]), int(pts[i+1][1]))
-        cv2.line(vis, pt1=pt1, pt2=pt2, color=color,
-                 thickness=1, lineType=cv2.LINE_AA)
-
-
-def _draw_trust_region(vis, pts, r, color):
-    # draw trust regions
-    # vis: image
-    # pts: points
-    # r: radius
-    # color: color
-    for i in range(len(pts)):
-        ptc = (int(pts[i][0]), int(pts[i][1]))
-        rx, ry = int(r[i][0]), int(r[i][1])  # trust region
-        cv2.ellipse(vis, center=ptc, axes=(rx, ry), angle=0, startAngle=0, endAngle=360,
-                    color=color, thickness=1, lineType=cv2.LINE_AA)
-
-
-def _print_vehicle_info(vis, ptc, v, color):
-    # print latitude
-    pt = (ptc[0] + 15, ptc[1])
-    text = "%.6f" % v.x
-    cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-                fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
-    # print longitude
-    pt = (ptc[0] + 15, ptc[1] + 20)
-    text = "%.6f" % v.y
-    cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-                fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
-    # print id
-    pt = (ptc[0] + 15, ptc[1] + 40)
-    text = f"id: {v.traj_id}"
-
-    cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-                fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
-    # pt = (ptc[0] + 15, ptc[1] + 60)
-    # if hasattr(v, 'lane') and v.lane is not None:
-    #     text = f"lane: {v.lane}"
-    #     cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-    #                 fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
-    # # print category
-    # if v.category is not None:
-    #     pt = (ptc[0] + 15, ptc[1] + 40)
-    #     if label_list is not None:
-    #         text = "%s" % label_list.id2label[str(v.category)]
-    #     else:
-    #         text = "Category: %d" % v.category
-    #     cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-    #                 fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
-
-
 class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
@@ -129,6 +49,86 @@ class Visualizer:
             self.label_list = parse_config(r'./vehicle_category.json')
         else:
             self.label_list = None
+    
+    @staticmethod
+    def _draw_vehicle_as_point(vis, ptc, color):
+        # draw circle boundary
+        cv2.circle(vis, tuple(ptc), 10, color, -1)
+        # draw center location
+        cv2.circle(vis, tuple(ptc), 4, (255, 255, 0), -1)
+
+    @staticmethod
+    def _draw_vehicle_as_box(vis, pts, color):
+        # fill rectangle
+        cv2.fillPoly(vis, [np.array(pts)], color, lineType=cv2.LINE_AA)
+
+    @staticmethod
+    def _draw_vehicle_heading_as_arrow(vis, ptc, heading, color):
+        # draw heading
+        # convert degree to radian
+        heading = math.radians(-heading + 90)
+
+        line_length = 50
+        pt1 = (int(ptc[0]), int(ptc[1]))
+        pt2 = (int(ptc[0] + line_length*np.cos(heading)),
+            int(ptc[1] + line_length*np.sin(heading)))
+        cv2.arrowedLine(vis, pt1=pt1, pt2=pt2, color=color,
+                        thickness=3, line_type=cv2.LINE_AA)
+
+    @staticmethod
+    def _draw_predicted_future(vis, pts, color):
+        # draw mean trajectory
+        for i in range(len(pts)-1):
+            pt1 = (int(pts[i][0]), int(pts[i][1]))
+            pt2 = (int(pts[i+1][0]), int(pts[i+1][1]))
+            cv2.line(vis, pt1=pt1, pt2=pt2, color=color,
+                    thickness=1, lineType=cv2.LINE_AA)
+
+    @staticmethod
+    def _draw_trust_region(vis, pts, r, color):
+        # draw trust regions
+        # vis: image
+        # pts: points
+        # r: radius
+        # color: color
+        for i in range(len(pts)):
+            ptc = (int(pts[i][0]), int(pts[i][1]))
+            rx, ry = int(r[i][0]), int(r[i][1])  # trust region
+            cv2.ellipse(vis, center=ptc, axes=(rx, ry), angle=0, startAngle=0, endAngle=360,
+                        color=color, thickness=1, lineType=cv2.LINE_AA)
+
+    @staticmethod
+    def _print_vehicle_info(vis, ptc, v, color):
+        # print latitude
+        pt = (ptc[0] + 15, ptc[1])
+        text = "%.6f" % v.x
+        cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
+        # print longitude
+        pt = (ptc[0] + 15, ptc[1] + 20)
+        text = "%.6f" % v.y
+        cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
+        # print id
+        pt = (ptc[0] + 15, ptc[1] + 40)
+        text = f"id: {v.traj_id}"
+
+        cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
+        # pt = (ptc[0] + 15, ptc[1] + 60)
+        # if hasattr(v, 'lane') and v.lane is not None:
+        #     text = f"lane: {v.lane}"
+        #     cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+        #                 fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
+        # # print category
+        # if v.category is not None:
+        #     pt = (ptc[0] + 15, ptc[1] + 40)
+        #     if label_list is not None:
+        #         text = "%s" % label_list.id2label[str(v.category)]
+        #     else:
+        #         text = "Category: %d" % v.category
+        #     cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+        #                 fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
 
     def _create_coord_mapper(self):
 
@@ -208,10 +208,10 @@ class Visualizer:
             ptc = self._world2pxl([v.x, v.y])
 
             # box unavailiable, draw a circle instead
-            _draw_vehicle_as_point(vis, ptc, color)
+            self._draw_vehicle_as_point(vis, ptc, color)
 
             # print vehicle info beside box
-            _print_vehicle_info(vis, ptc, v, (255, 255, 0),)
+            self._print_vehicle_info(vis, ptc, v, (255, 255, 0),)
 
         return vis
 
