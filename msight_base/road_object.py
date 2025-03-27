@@ -1,4 +1,4 @@
-class RoadObject:
+class RoadUserPoint:
     def __init__(self, x, y, heading=None, width=None, length=None, category=None):
         self.x = x
         self.y = y
@@ -14,19 +14,25 @@ class RoadObject:
 
     @property
     def traj_id(self):
+        if self.traj is None:
+            return None
         return self.traj.id
 
     @property
     def frame_step(self):
+        if self.frame is None:
+            return None
         return self.frame.step
 
     @property
     def timestamp(self):
+        if self.frame is None:
+            return None
         return self.frame.timestamp
 
     @staticmethod
     def from_dict(object_dict):
-        return RoadObject(
+        return RoadUserPoint(
             object_dict['x'],
             object_dict['y'],
             heading=object_dict['heading'],
