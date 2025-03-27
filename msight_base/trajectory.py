@@ -1,7 +1,5 @@
 import bisect
 
-# from .road_object import RoadObject
-
 class Container:
     def __init__(self, id=None, objects = None):
         self.id = id

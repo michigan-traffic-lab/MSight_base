@@ -1,5 +1,5 @@
 from .trajectory import TrajectoryManager, Frame, Trajectory
-from .road_object import RoadObject
+from .road_object import RoadUserPoint
 from .visualizer import Visualizer
 
 # versioning

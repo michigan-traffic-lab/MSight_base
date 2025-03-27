@@ -1,5 +1,5 @@
 from pathlib import Path
-from msight_base import TrajectoryManager, RoadObject
+from msight_base import TrajectoryManager, RoadUserPoint
 import json
 from datetime import datetime
 from tqdm import tqdm
@@ -21,7 +21,7 @@ def read_msight_json_data(file_path: Path) -> TrajectoryManager:
         with open(frame_file, "r") as f:
             frame_data = json.load(f)
             for obj_data in frame_data['fusion']:
-                obj = RoadObject(
+                obj = RoadUserPoint(
                     obj_data['lat'],
                     obj_data['lon'],
                     heading=obj_data['heading'],
