@@ -121,7 +121,7 @@ class TrajectoryManager:
         frame.add_object(obj)
 
     def remove_traj(self, traj: Trajectory):
-        print(f"Removing trajectory with id {traj.id}")
+        # print(f"Removing trajectory with id {traj.id}")
         tid = traj.id
         self.trajectories.remove(traj)
         self.traj_ids.remove(tid)

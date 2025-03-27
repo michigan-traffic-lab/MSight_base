@@ -10,6 +10,7 @@ class RoadObject:
         self.frame = None
         self.prev = None
         self.next = None
+        self.sensor_data = {} # sensor id to sensor data map
 
     @property
     def traj_id(self):
