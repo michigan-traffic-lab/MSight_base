@@ -1,6 +1,7 @@
 from .trajectory import TrajectoryManager, Frame, Trajectory
-from .road_object import RoadUserPoint
+from .road_user import RoadUserPoint
 from .visualizer import Visualizer
+from .detection import DetectionResultBase, DetectedObjectBase
 
 # versioning
 try:

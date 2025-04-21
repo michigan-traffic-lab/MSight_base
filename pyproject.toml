@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "msight_base"
-version = "0.1.0"
+version = "0.1.2"
 description = "Object classes and base trajectory management for the MSight system"
 authors = [
     { name = "Rusheng Zhang", email = "zrs1990@gmail.com" }
