@@ -89,7 +89,7 @@ class TrajectoryManager:
     @property
     def last_step(self):
         return len(self.frames) - 1
-    
+
     @property
     def last_frame(self):
         return self.frames[-1]
@@ -102,7 +102,6 @@ class TrajectoryManager:
             self.traj_id_to_traj_map[traj_id] = traj
         else:
             traj = self.traj_id_to_traj_map[traj_id]
-
 
         if step == self.last_step + 1:
             frame = Frame(step, timestamp)

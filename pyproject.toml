@@ -12,6 +12,7 @@ authors = [
 dependencies = [
     "numpy",
     "opencv-python",
-    "tqdm"
+    "tqdm",
+    "commonroad-io"
 ]
 requires-python = ">=3.6"
