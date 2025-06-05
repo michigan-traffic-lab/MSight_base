@@ -2,7 +2,24 @@ from enum import Enum
 
 
 class RoadUserPoint:
-    def __init__(self, timestamp=None, frame_step=None, traj_id=None, x=None, y=None, speed=None, acceleration=None, heading=None, width=None, length=None, poly_box=None, category=None, confidence=None, turning_signal=None, map_info=None, sensor_data={}):
+    def __init__(self,
+                 timestamp=None,
+                 frame_step=None,
+                 traj_id=None,
+                 x=None,
+                 y=None,
+                 speed=None,
+                 acceleration=None,
+                 heading=None,
+                 width=None,
+                 length=None,
+                 poly_box=None,
+                 category=None,
+                 confidence=None,
+                 turning_signal=None,
+                 map_info=None,
+                 sensor_data={},
+                 behaviors=[],):
         self._timestamp = timestamp
         self._frame_step = frame_step
         self.x = x
@@ -22,7 +39,7 @@ class RoadUserPoint:
         self.confidence = confidence
         self.turning_signal = turning_signal
         self.map_info = map_info
-        self.behaviors = []
+        self.behaviors = behaviors
         self.pred_trajectory = None
 
         ## this is used to store the id when the object's trajectory is not yet created or assigned
