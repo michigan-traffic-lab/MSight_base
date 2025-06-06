@@ -39,23 +39,34 @@ class MapInfo:
 
 class MapObject:
     def __init__(self, commonroadObj: LaneletNetwork, center_point, map_lanes, lane_heading, lane_shape: List[LaneShape], lane_seg_length, background_img, corner_coords):
-        self._obj = commonroadObj
         self.center_point = center_point
         self._map_lanes = map_lanes
         self._lane_heading = lane_heading
-        self.map_polylines_ids = [lanelet.lanelet_id for lanelet in self._obj.lanelets]
-        self._suc_edges = [lanelet.successor for lanelet in self._obj.lanelets]
-        self._pre_edges = [lanelet.predecessor for lanelet in self._obj.lanelets]
-        self._left_edges = [lanelet.adj_left for lanelet in self._obj.lanelets]
-        self._left_edge_directions = [lanelet.adj_left_same_direction for lanelet in self._obj.lanelets]
-        self._right_edges = [lanelet.adj_right for lanelet in self._obj.lanelets]
-        self._right_edge_directions = [lanelet.adj_right_same_direction for lanelet in self._obj.lanelets]
-        self.intersection_lane_id_list = [lanelet.lanelet_id for lanelet in self._obj.lanelets if LaneletType.INTERSECTION in lanelet.lanelet_type]
-        self.straight_lane_id_list = [lanelet.lanelet_id for lanelet in self._obj.lanelets if LaneletType.INTERSECTION not in lanelet.lanelet_type]
         self._lane_shape = lane_shape
         self._lane_seg_length = lane_seg_length
         self.background_img = background_img
         self.corner_coords = corner_coords
+
+        if isinstance(commonroadObj, LaneletNetwork):
+            self.map_polylines_ids = [lanelet.lanelet_id for lanelet in commonroadObj.lanelets]
+            self._suc_edges = [lanelet.successor for lanelet in commonroadObj.lanelets]
+            self._pre_edges = [lanelet.predecessor for lanelet in commonroadObj.lanelets]
+            self._left_edges = [lanelet.adj_left for lanelet in commonroadObj.lanelets]
+            self._left_edge_directions = [lanelet.adj_left_same_direction for lanelet in commonroadObj.lanelets]
+            self._right_edges = [lanelet.adj_right for lanelet in commonroadObj.lanelets]
+            self._right_edge_directions = [lanelet.adj_right_same_direction for lanelet in commonroadObj.lanelets]
+            self.intersection_lane_id_list = [lanelet.lanelet_id for lanelet in commonroadObj.lanelets if LaneletType.INTERSECTION in lanelet.lanelet_type]
+            self.straight_lane_id_list = [lanelet.lanelet_id for lanelet in commonroadObj.lanelets if LaneletType.INTERSECTION not in lanelet.lanelet_type]
+        else:
+            self.map_polylines_ids = []
+            self._suc_edges = []
+            self._pre_edges = []
+            self._left_edges = []
+            self._left_edge_directions = []
+            self._right_edges = []
+            self._right_edge_directions = []
+            self.intersection_lane_id_list = []
+            self.straight_lane_id_list = []
 
     def suc_edges(self, id=-1):
         if id == -1:
