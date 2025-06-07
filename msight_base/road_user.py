@@ -135,6 +135,9 @@ class RoadUserCategory(Enum):
     PEDESTRIAN = 3
     BICYCLE = 4
     MOTORCYCLE = 5
+    TRAILER = 6
+    VAN = 7
+    PICKUP = 8
 
     def __str__(self):
         return self.name.lower()
