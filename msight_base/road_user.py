@@ -13,6 +13,7 @@ class RoadUserPoint:
                  heading=None,
                  width=None,
                  length=None,
+                 height=None,
                  poly_box=None,
                  category=None,
                  confidence=None,
@@ -29,6 +30,7 @@ class RoadUserPoint:
         self.heading = heading
         self.width = width
         self.length = length
+        self.height = height
         self.poly_box = poly_box
         self.category = category
         self.traj = None
@@ -112,6 +114,7 @@ class RoadUserPoint:
             'heading': self.heading,
             'width': self.width,
             'length': self.length,
+            'height': self.height,
             'map_info': self.map_info.to_dict() if self.map_info else None,
             'behaviors': self.behaviors,
             'sensor_data': self.sensor_data
