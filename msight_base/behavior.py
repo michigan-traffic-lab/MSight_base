@@ -5,21 +5,24 @@ class BehaviorType(Enum):
     """
     Enum for different types of behaviors.
     """
-    UNKNOWN = 0
-    CONSTANT = 1
-    ACCELERATE = 2
-    DECELERATE = 3
-    STOP = 4
-    LANE_KEEPING = 5
-    LANE_CHANGING = 6
-    LANE_DEPARTURE = 7
-    TURNING_LEFT = 8
-    TURNING_RIGHT = 9
+    UNKNOWN = -1
+    CONSTANT = 0
+    ACCELERATE = 1
+    DECELERATE = 2
+    STOP = 3
+    LANE_KEEPING = 4
+    LANE_CHANGING = 5
+    LANE_DEPARTURE = 6
+    TURNING_LEFT = 7
+    TURNING_RIGHT = 8
 
     # Additional behaviors
-    U_TURN = 10
-    YIELDING = 11
-    FOLLOWING = 12
-    OVERTAKING = 13
-    PARKING = 14
-    EMERGENCY_BRAKING = 15
+    U_TURN = 9
+    YIELDING = 10
+    FOLLOWING = 11
+    OVERTAKING = 12
+    PARKING = 13
+    EMERGENCY_BRAKING = 14
+
+    def __str__(self):
+        return self.name.lower()
