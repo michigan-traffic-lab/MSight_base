@@ -25,12 +25,13 @@ class LaneSide(Enum):
 
 
 class MapInfo:
-    def __init__(self, lane_id, lane_point_idx, dis_to_lane_center, side: LaneSide, related_lane_id, nearest_next_lane_point_idx=None):
+    def __init__(self, lane_id, lane_point_idx, dis_to_lane_center, side: LaneSide, related_lane_id, related_route, nearest_next_lane_point_idx=None):
         self.lane_id = lane_id
         self.lane_point_idx = lane_point_idx
         self.dis_to_lane_center = dis_to_lane_center
         self.side = side
         self.related_lane_id = related_lane_id
+        self.related_route = related_route
         self.nearest_next_lane_point_idx = nearest_next_lane_point_idx
 
     def __repr__(self):
