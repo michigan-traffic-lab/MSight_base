@@ -36,6 +36,17 @@ class MapInfo:
 
     def __repr__(self):
         return f"MapInfo(lane_id={self.lane_id}, lane_point_idx={self.lane_point_idx})"
+    
+    def to_dict(self):
+        return {
+            'lane_id': self.lane_id,
+            'lane_point_idx': self.lane_point_idx,
+            'dis_to_lane_center': self.dis_to_lane_center,
+            'side': self.side.value,
+            'related_lane_id': self.related_lane_id,
+            'related_route': self.related_route,
+            'nearest_next_lane_point_idx': self.nearest_next_lane_point_idx
+        }
 
 
 class MapObject:

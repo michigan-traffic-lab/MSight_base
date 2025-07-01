@@ -103,7 +103,6 @@ class RoadUserPoint:
 
     def to_dict(self):
         return {
-            'source': self.source,
             'traj_id': self.traj_id,
             'frame_step': self.frame_step,
             'timestamp': self.timestamp,
@@ -115,8 +114,12 @@ class RoadUserPoint:
             'width': self.width,
             'length': self.length,
             'height': self.height,
+            'category': str(self.category) if self.category else None,
+            'confidence': self.confidence,
+            'turning_signal': self.turning_signal,
+            'poly_box': self.poly_box,
             'map_info': self.map_info.to_dict() if self.map_info else None,
-            'behaviors': self.behaviors,
+            'behaviors': [str(behavior) for behavior in self.behaviors],
             'sensor_data': self.sensor_data
         }
 
