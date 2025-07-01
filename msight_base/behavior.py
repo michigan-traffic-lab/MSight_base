@@ -26,3 +26,11 @@ class BehaviorType(Enum):
 
     def __str__(self):
         return self.name.lower()
+    
+    @classmethod
+    def from_name(cls, name: str):
+        try:
+            return cls[name.upper()]
+        except KeyError:
+            # Fall back to UNKNOWN
+            return cls.UNKNOWN

@@ -1,4 +1,6 @@
 from enum import Enum
+from msight_base.map import MapInfo
+from msight_base.behavior import BehaviorType
 
 
 class RoadUserPoint:
@@ -90,15 +92,24 @@ class RoadUserPoint:
     @staticmethod
     def from_dict(object_dict):
         return RoadUserPoint(
-            object_dict['x'],
-            object_dict['y'],
-            speed=object_dict['speed'],
-            acceleration=object_dict['acceleration'],
-            source=object_dict['source'],
-            heading=object_dict['heading'],
-            width=object_dict['width'],
-            length=object_dict['length'],
-            id=object_dict['id'],
+            timestamp=object_dict.get('timestamp', None),
+            frame_step=object_dict.get('frame_step', None),
+            traj_id=object_dict.get('traj_id', None),
+            x=object_dict.get('x', None),
+            y=object_dict.get('y', None),
+            speed=object_dict.get('speed', None),
+            acceleration=object_dict.get('acceleration', None),
+            heading=object_dict.get('heading', None),
+            width=object_dict.get('width', None),
+            length=object_dict.get('length', None),
+            height=object_dict.get('height', None),
+            poly_box=object_dict.get('poly_box', None),
+            category=RoadUserCategory[object_dict['category']] if object_dict.get('category') else None,
+            confidence=object_dict.get('confidence', None),
+            turning_signal=object_dict.get('turning_signal', None),
+            map_info=MapInfo.from_dict(object_dict['map_info']) if object_dict.get('map_info') else None,
+            sensor_data=object_dict.get('sensor_data', {}),
+            behaviors=[BehaviorType[behavior] for behavior in object_dict.get('behaviors', [])],
         )
 
     def to_dict(self):
@@ -144,3 +155,11 @@ class RoadUserCategory(Enum):
 
     def __str__(self):
         return self.name.lower()
+    
+    @classmethod
+    def from_name(cls, name: str):
+        try:
+            return cls[name.upper()]
+        except KeyError:
+            # Fall back to UNKNOWN
+            return cls.UNKNOWN

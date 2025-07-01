@@ -23,6 +23,14 @@ class LaneSide(Enum):
     ONLANE = 0
     UNKNOWN = 'unknown'
 
+    @classmethod
+    def from_name(cls, name: str):
+        try:
+            return cls[name.upper()]
+        except KeyError:
+            # Fall back to UNKNOWN
+            return cls.UNKNOWN
+
 
 class MapInfo:
     def __init__(self, lane_id, lane_point_idx, dis_to_lane_center, side: LaneSide, related_lane_id, related_route, nearest_next_lane_point_idx=None):
@@ -36,6 +44,17 @@ class MapInfo:
 
     def __repr__(self):
         return f"MapInfo(lane_id={self.lane_id}, lane_point_idx={self.lane_point_idx})"
+    
+    def from_dict(cls, object_dict):
+        return cls(
+            lane_id=object_dict.get('lane_id', None),
+            lane_point_idx=object_dict.get('lane_point_idx', None),
+            dis_to_lane_center=object_dict.get('dis_to_lane_center', None),
+            side=LaneSide.from_name(object_dict.get('side', 'unknown')),
+            related_lane_id=object_dict.get('related_lane_id', None),
+            related_route=object_dict.get('related_route', None),
+            nearest_next_lane_point_idx=object_dict.get('nearest_next_lane_point_idx', None)
+        )
     
     def to_dict(self):
         return {
