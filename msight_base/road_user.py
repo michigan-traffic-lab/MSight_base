@@ -5,9 +5,6 @@ from msight_base.behavior import BehaviorType
 
 class RoadUserPoint:
     def __init__(self,
-                 timestamp=None,
-                 frame_step=None,
-                 traj_id=None,
                  x=None,
                  y=None,
                  speed=None,
@@ -21,6 +18,9 @@ class RoadUserPoint:
                  confidence=None,
                  turning_signal=None,
                  map_info=None,
+                 timestamp=None,
+                 frame_step=None,
+                 traj_id=None,
                  sensor_data={},
                  behaviors=[],):
         self._timestamp = timestamp
