@@ -41,7 +41,7 @@ class Visualizer:
         self.color_table = np.random.randint(80, 255, (10, 3))
         np.random.seed()
 
-        self.traj_manager = TrajectoryManager()
+        self.traj_manager = TrajectoryManager(max_frames=100)
         self.traj_layer = np.zeros([self.h, self.w, 3], dtype=np.uint8)
         self.traj_alpha = np.zeros([self.h, self.w, 3], dtype=np.float32)
 
@@ -66,9 +66,9 @@ class Visualizer:
     def _draw_vehicle_heading_as_arrow(vis, ptc, heading, color):
         # draw heading
         # convert degree to radian
-        heading = math.radians(-heading + 90)
+        heading = math.radians(heading-90)
 
-        line_length = 50
+        line_length = 25
         pt1 = (int(ptc[0]), int(ptc[1]))
         pt2 = (int(ptc[0] + line_length*np.cos(heading)),
             int(ptc[1] + line_length*np.sin(heading)))
@@ -110,11 +110,16 @@ class Visualizer:
         cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
                     fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
         # print id
-        pt = (ptc[0] + 15, ptc[1] + 40)
-        text = f"id: {v.traj_id}"
-
-        cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-                    fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
+        if hasattr(v, 'traj_id') and v.traj_id is not None:
+            pt = (ptc[0] + 15, ptc[1] + 40)
+            text = f"id: {v.traj_id}"
+            cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+                        fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
+        if v.heading is not None:
+            pt= (ptc[0] + 15, ptc[1] + 60)
+            text = f"heading: {v.heading:.2f} deg"
+            cv2.putText(vis, text=text, org=pt, fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+                        fontScale=0.5, color=color, thickness=1, lineType=cv2.LINE_AA)
         # pt = (ptc[0] + 15, ptc[1] + 60)
         # if hasattr(v, 'lane') and v.lane is not None:
         #     text = f"lane: {v.lane}"
@@ -210,6 +215,9 @@ class Visualizer:
             # box unavailiable, draw a circle instead
             self._draw_vehicle_as_point(vis, ptc, color)
 
+            if show_heading:
+                self._draw_vehicle_heading_as_arrow(vis, ptc, v.heading, color)
+
             # print vehicle info beside box
             self._print_vehicle_info(vis, ptc, v, (255, 255, 0),)
 
@@ -261,6 +269,7 @@ class Visualizer:
     def render(self, frame,  with_traj=True, linewidth=2, show_heading=False):
         base_layer = self.draw_points(
             frame, show_heading=show_heading)
+        
         if with_traj:
             traj_layer, traj_alpha = self.draw_trajectory(
                 frame, linewidth)
@@ -270,3 +279,11 @@ class Visualizer:
             map_vis = base_layer
 
         return map_vis
+    
+    def render_roaduser_points(self, list_of_points, show_heading=False):
+        ## this method is used to render a list of roaduser point, this is particularly useful when you have a list of points without knowing the id (so you can't generate frame)
+        
+        base_layer = self.draw_points(
+            list_of_points, show_heading=show_heading)
+        return base_layer
+
