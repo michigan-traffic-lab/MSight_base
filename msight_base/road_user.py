@@ -143,15 +143,16 @@ class RoadUserCategory(Enum):
     Enum for road user categories.
     """
     UNKNOWN = -1
-    CAR = 0
-    TRUCK = 1
-    BUS = 2
-    PEDESTRIAN = 3
-    BICYCLE = 4
-    MOTORCYCLE = 5
-    TRAILER = 6
-    VAN = 7
-    PICKUP = 8
+    SEDAN = 0
+    SUV = 1
+    TRUCK = 2
+    BUS = 3
+    PEDESTRIAN = 4
+    BICYCLE = 5
+    MOTORCYCLE = 6
+    TRAILER = 7
+    VAN = 8
+    PICKUP = 9
 
     def __str__(self):
         return self.name.lower()
