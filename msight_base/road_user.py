@@ -104,7 +104,7 @@ class RoadUserPoint:
             length=object_dict.get('length', None),
             height=object_dict.get('height', None),
             poly_box=object_dict.get('poly_box', None),
-            category=RoadUserCategory[object_dict['category']] if object_dict.get('category') else None,
+            category=RoadUserCategory.from_name(object_dict['category']) if object_dict.get('category') else None,
             confidence=object_dict.get('confidence', None),
             turning_signal=object_dict.get('turning_signal', None),
             map_info=MapInfo.from_dict(object_dict['map_info']) if object_dict.get('map_info') else None,
