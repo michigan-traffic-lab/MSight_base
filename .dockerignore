@@ -1,0 +1,20 @@
+# Ignore Python cache and bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore git and test files
+.git/
+*.log
+tests/
+
+# Ignore build artifacts
+dist/
+build/
+
+# Ignore config/secrets
+.env
+*.pem
+*.egg-info/
+.git/
+examples/
