@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 from msight_base.map import MapInfo
 from msight_base.behavior import BehaviorType
 
@@ -22,7 +22,11 @@ class RoadUserPoint:
                  frame_step=None,
                  traj_id=None,
                  sensor_data={},
-                 behaviors=[],):
+                 behaviors=[],
+                 conf_int_2sigma=None,
+                 conf_int_vel_2sigma=None,
+                 heading_confidence=None,
+                 yaw_rate=None):
         self._timestamp = timestamp
         self._frame_step = frame_step
         self.x = x
@@ -45,6 +49,10 @@ class RoadUserPoint:
         self.map_info = map_info
         self.behaviors = behaviors
         self.pred_trajectory = None
+        self.conf_int_2sigma = conf_int_2sigma
+        self.conf_int_vel_2sigma = conf_int_vel_2sigma
+        self.heading_confidence = heading_confidence
+        self.yaw_rate = yaw_rate
 
         ## this is used to store the id when the object's trajectory is not yet created or assigned
         self._traj_id = traj_id
@@ -110,6 +118,10 @@ class RoadUserPoint:
             map_info=MapInfo.from_dict(object_dict['map_info']) if object_dict.get('map_info') else None,
             sensor_data=object_dict.get('sensor_data', {}),
             behaviors=[BehaviorType[behavior] for behavior in object_dict.get('behaviors', [])],
+            conf_int_2sigma=object_dict.get('conf_int_2sigma', None),
+            conf_int_vel_2sigma=object_dict.get('conf_int_vel_2sigma', None),
+            heading_confidence=object_dict.get('heading_confidence', None),
+            yaw_rate=object_dict.get('yaw_rate', None)
         )
 
     def to_dict(self):
@@ -131,14 +143,18 @@ class RoadUserPoint:
             'poly_box': self.poly_box,
             'map_info': self.map_info.to_dict() if self.map_info else None,
             'behaviors': [str(behavior) for behavior in self.behaviors],
-            'sensor_data': self.sensor_data
+            'sensor_data': self.sensor_data,
+            'conf_int_2sigma': self.conf_int_2sigma,
+            'conf_int_vel_2sigma': self.conf_int_vel_2sigma,
+            'heading_confidence': self.heading_confidence,
+            'yaw_rate': self.yaw_rate,
         }
 
     def __repr__(self):
         return f"RoadUserPoint(x={self.x}, y={self.y}, heading={self.heading}, width={self.width}, length={self.length})"
 
 
-class RoadUserCategory(Enum):
+class RoadUserCategory(IntEnum):
     """
     Enum for road user categories.
     """
