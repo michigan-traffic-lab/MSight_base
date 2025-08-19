@@ -9,11 +9,12 @@ class DetectedObjectBase:
         raise NotImplementedError("Subclasses should implement this!")
 
 class DetectionResultBase:
-    def __init__(self, object_list: List[DetectedObjectBase], timestamp: int, sensor_id: str, sensor_type: str):
+    def __init__(self, object_list: List[DetectedObjectBase], timestamp: int, sensor_id: str, sensor_type: str, frame_id: str):
         self.object_list = object_list
         self.timestamp = timestamp
         self.sensor_id = sensor_id
         self.sensor_type = sensor_type
+        self.frame_id = frame_id
 
     def to_dict(self):
         object_data_type = get_class_path(self.object_list[0].__class__) if len(self.object_list) > 0 else None
@@ -22,7 +23,8 @@ class DetectionResultBase:
             'timestamp': self.timestamp,
             'sensor_id': self.sensor_id,
             'sensor_type': self.sensor_type,
-            'object_data_type': object_data_type
+            'object_data_type': object_data_type,
+            'frame_id': self.frame_id,
         }
     
     @staticmethod
@@ -38,5 +40,6 @@ class DetectionResultBase:
             object_list=object_list,
             timestamp=data['timestamp'],
             sensor_id=data['sensor_id'],
-            sensor_type=data['sensor_type']
+            sensor_type=data['sensor_type'],
+            frame_id=data['frame_id'],
         )
