@@ -88,7 +88,7 @@ class RoadUserPoint:
     @property
     def timestamp(self):
         if self.frame is None:
-            return None
+            return self._timestamp
         return self.frame.timestamp
     
     @timestamp.setter
