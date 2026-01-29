@@ -15,7 +15,7 @@ class DetectionResultBase:
         self.sensor_type = sensor_type
 
     def to_dict(self):
-        object_data_type = get_class_path(self.object_list[0].__class__) if len(self.object_list) > 0 else None
+        object_data_type = get_class_path(self.object_list[0].__class__) if len(self.object_list) > 0 else get_class_path(DetectedObjectBase)
         return {
             'object_list': [obj.to_dict() for obj in self.object_list],
             'timestamp': self.timestamp,
@@ -30,7 +30,10 @@ class DetectionResultBase:
             raise ValueError(f"Missing 'object_data_type' in data: {data}")
 
         obj_cls = import_class_from_path(object_data_type)
-        object_list = [obj_cls.from_dict(obj_data) for obj_data in data['object_list']]
+        if data['object_list'] is not None and len(data['object_list']) > 0:
+            object_list = [obj_cls.from_dict(obj_data) for obj_data in data['object_list']]
+        else:
+            object_list = []
 
         return DetectionResultBase(
             object_list=object_list,
