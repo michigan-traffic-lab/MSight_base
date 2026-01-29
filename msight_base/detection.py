@@ -31,7 +31,7 @@ class DetectionResultBase:
     def from_dict(data: dict) -> 'DetectionResultBase':
         object_data_type = data.get("object_data_type")
         if object_data_type is None:
-            raise ValueError("Missing 'object_data_type' in data.")
+            raise ValueError(f"Missing 'object_data_type' in data: {data}")
 
         obj_cls = import_class_from_path(object_data_type)
         object_list = [obj_cls.from_dict(obj_data) for obj_data in data['object_list']]
