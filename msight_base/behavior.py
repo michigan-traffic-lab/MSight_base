@@ -13,8 +13,8 @@ class BehaviorType(Enum):
     LANE_KEEPING = 4
     LANE_CHANGING = 5
     LANE_DEPARTURE = 6
-    TURNING_LEFT = 7
-    TURNING_RIGHT = 8
+    LEFT_TURN = 7
+    RIGHT_TURN = 8
 
     # Additional behaviors
     U_TURN = 9
