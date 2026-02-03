@@ -55,7 +55,8 @@ class Trajectory(Container):
     
     def remove_object(self, step):
         if step not in self.steps:
-            raise ValueError(f"Step {step} does not exist in the trajectory")
+            return
+            # raise ValueError(f"Step {step} does not exist in the trajectory")
         obj = self.get_object_at_step(step)
         self.objects.remove(obj)
         self.steps.remove(step)
@@ -146,7 +147,7 @@ class TrajectoryManager:
         else:
             traj = self.traj_id_to_traj_map[traj_id]
 
-        if step == self.last_step + 1:
+        if step >= self.last_step + 1:
             frame = Frame(step, timestamp)
             self.frames.append(frame)
             self.steps.append(step)
