@@ -117,7 +117,7 @@ class RoadUserPoint:
             turning_signal=object_dict.get('turning_signal', None),
             map_info=MapInfo.from_dict(object_dict['map_info']) if object_dict.get('map_info') else None,
             sensor_data=object_dict.get('sensor_data', {}),
-            behaviors=[BehaviorType[behavior] for behavior in object_dict.get('behaviors', [])],
+            behaviors=[BehaviorType.from_name(behavior) for behavior in object_dict.get('behaviors', [])],
             conf_int_2sigma=object_dict.get('conf_int_2sigma', None),
             conf_int_vel_2sigma=object_dict.get('conf_int_vel_2sigma', None),
             heading_confidence=object_dict.get('heading_confidence', None),

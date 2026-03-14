@@ -45,8 +45,9 @@ class MapInfo:
     def __repr__(self):
         return f"MapInfo(lane_id={self.lane_id}, lane_point_idx={self.lane_point_idx})"
     
-    def from_dict(cls, object_dict):
-        return cls(
+    @staticmethod
+    def from_dict(object_dict):
+        return MapInfo(
             lane_id=object_dict.get('lane_id', None),
             lane_point_idx=object_dict.get('lane_point_idx', None),
             dis_to_lane_center=object_dict.get('dis_to_lane_center', None),
